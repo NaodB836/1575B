@@ -4,11 +4,13 @@ void default_constants();
 
 void blue_Right_Side();
 void blue_Left_Side();
-void red_Right_Side();
+void red_Right_Side_AWP();
 void red_Left_Side();
 void elimsAutoRedLeft();
 void elimsAutoBlueRight();
 void skillsAuto();
+void blueRingRush();
+void redRingRush();
 void soloSigAWPBlueRight();
 void redAutoRightElims();
 void default_constants();

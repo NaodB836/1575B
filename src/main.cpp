@@ -9,9 +9,9 @@
 ez::Drive chassis(
         // These are your drive motors, the first motor is used for sensing!
     {-11, -3, -4},     // Left Chassis Ports (negative port will reverse it!)
-    {9, 10, 20},  // Right Chassis Ports (negative port will reverse it!)
+    {6, 10, 19},  // Right Chassis Ports (negative port will reverse it!)
 
-    8,      // IMU Port
+    7,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM
 // Uncomment the trackers you're using here!
@@ -19,8 +19,8 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+//ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+//ez::tracking_wheel vert_tracker(15, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -28,6 +28,7 @@ ez::Drive chassis(
  * All other competition modes are blocked by initialize; it is recommended
  * to keep execution time for this mode under a few seconds.
  */
+
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
@@ -37,15 +38,15 @@ void initialize() {
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
-  // chassis.odom_tracker_back_set(&horiz_tracker);
+  //chassis.odom_tracker_front_set(&horiz_tracker);
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  //chassis.odom_tracker_left_set(&vert_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
-  chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
+  chassis.opcontrol_drive_activebrake_set(2.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
   chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   // Set the drive to your own constants from autons.cpp!
@@ -57,16 +58,22 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {" Right Side Auton AWP", red_Right_Side},
-      {" Left Side Auton AWP", blue_Left_Side},
-      {"Skills Auto", skillsAuto},
-      {"Sig Auto", soloSigAWPBlueRight},
-      {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
-      {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
-      {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
-      {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
-      {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
-      {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
+      {"Left Side Red Elims Auto", elimsAutoRedLeft}, 
+      {"Blue Ring Rush", blueRingRush},  
+      {" Left Side Red Auton AWP", red_Left_Side},
+      {"Red Ring Rush", redRingRush},
+      {"Blue Ring Rush", blueRingRush},  
+      {" Left Side Blue Auton AWP", blue_Left_Side},
+      {" Right Side Blue Auton AWP", blue_Right_Side},
+      {" Left Side Red Auton AWP", red_Left_Side},
+      {" Right Side Red Auton AWP", red_Right_Side_AWP},
+      {"Skills Auto", skillsAuto},      
+      // {"Simple Odom\n\nThis is the same as the drive example, but it uses odom instead!", odom_drive_example},
+      // {"Pure Pursuit\n\nGo to (0, 30) and pass through (6, 10) on the way.  Come back to (0, 0)", odom_pure_pursuit_example},
+      // {"Pure Pursuit Wait Until\n\nGo to (24, 24) but start running an intake once the robot passes (12, 24)", odom_pure_pursuit_wait_until_example},
+      // {"Boomerang\n\nGo to (0, 24, 45) then come back to (0, 0, 0)", odom_boomerang_example},
+      // {"Boomerang Pure Pursuit\n\nGo to (0, 24, 45) on the way to (24, 24) then come back to (0, 0, 0)", odom_boomerang_injected_pure_pursuit_example},
+      // {"Measure Offsets\n\nThis will turn the robot a bunch of times and calculate your offsets for your tracking wheels.", measure_offsets},
   });
 
   // Initialize chassis and auton selector
@@ -190,36 +197,36 @@ void autonomous() {
 //  *     is only enabled when you're not connected to competition control.
 //  * - gives you a GUI to change your PID values live by pressing X
 //  */
-// void ez_template_extras() {
-//   // Only run this when not connected to a competition switch
-//   if (!pros::competition::is_connected()) {
-//     // PID Tuner
-//     // - after you find values that you're happy with, you'll have to set them in auton.cpp
+void ez_template_extras() {
+  // Only run this when not connected to a competition switch
+  if (!pros::competition::is_connected()) {
+    // PID Tuner
+    // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
-//     // Enable / Disable PID Tuner
-//     //  When enabled:
-//     //  * use A and Y to increment / decrement the constants
-//     //  * use the arrow keys to navigate the constants
-//     if (master.get_digital_new_press(DIGITAL_X))
-//       chassis.pid_tuner_toggle();
+    // Enable / Disable PID Tuner
+    //  When enabled:
+    //  * use A and Y to increment / decrement the constants
+    //  * use the arrow keys to navigate the constants
+    if (master.get_digital_new_press(DIGITAL_X))
+      chassis.pid_tuner_toggle();
 
-//     // Trigger the selected autonomous routine
-//     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
-//       pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
-//       autonomous();
-//       chassis.drive_brake_set(preference);
-//     }
+    // Trigger the selected autonomous routine
+    if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
+      pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
+      autonomous();
+      chassis.drive_brake_set(preference);
+    }
 
-//     // Allow PID Tuner to iterate
-//     chassis.pid_tuner_iterate();
-//   }
+    // Allow PID Tuner to iterate
+    chassis.pid_tuner_iterate();
+  }
 
-//   // Disable PID Tuner when connected to a comp switch
-//   else {
-//     if (chassis.pid_tuner_enabled())
-//       chassis.pid_tuner_disable();
-//   }
-// }
+  // Disable PID Tuner when connected to a comp switch
+  else {
+    if (chassis.pid_tuner_enabled())
+      chassis.pid_tuner_disable();
+  }
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -236,15 +243,15 @@ void autonomous() {
  */
 void senseRedOP(){
   while (true) { // Infinite loop to continuously check the color sensor
-
+    OP.set_led_pwm(100);
     // Get the detected color hue from the color sensor
     int hue = OP.get_hue();
 
     // Check if the detected color is red (typical red hue is around 8 degrees)
-    if (hue >= 5 && hue <= 15){
-      pros::delay(50); // Small delay before activating piston
-      intakeMotor.move_velocity(-600);
-      pros::delay(800); // Delay to keep sorter active for a longer duration
+    if (hue >= 0 && hue <= 10 && OP.get_proximity() == 255){
+      pros::delay(210); // Small delay before activating piston
+      intakeMotor.move_velocity(0);
+      pros::delay(175); // Delay to keep sorter active for a longer duration
       
     }
     else{ // If the color is neither red nor blue, deactivate the color sorter piston
@@ -252,7 +259,7 @@ void senseRedOP(){
       {
         intakeMotor.move_velocity(600);
       }
-      if(master.get_digital(DIGITAL_R2))
+      else if(master.get_digital(DIGITAL_R2))
       {
         intakeMotor.move_velocity(-600);
       }
@@ -267,6 +274,52 @@ void senseRedOP(){
     }
 }
 
+void senseBlueOP(){
+  while (true) { // Infinite loop to continuously check the color sensor
+    OP.set_led_pwm(100);
+    // Get the detected color hue from the color sensor
+    int hue = OP.get_hue();
+
+    // Check if the detected color is blue(typical red hue is around 222 degrees)
+    if (hue >= 220 && hue <= 230 && OP.get_proximity() == 255){
+      pros::delay(210); // Small delay before activating piston
+      intakeMotor.move_velocity(0);
+      pros::delay(175); // Delay to keep sorter active for a longer duration
+      
+    }
+    else{ // If the color is neither red nor blue, deactivate the color sorter piston
+      if(master.get_digital(DIGITAL_R1))
+      {
+        intakeMotor.move_velocity(600);
+      }
+      else if(master.get_digital(DIGITAL_R2))
+      {
+        intakeMotor.move_velocity(-600);
+      }
+      else
+      {
+        intakeMotor.move_velocity(0);
+      }
+    }
+
+    // Small delay to prevent overwhelming the CPU with constant checks
+    pros::delay(20);
+    }
+}
+const int numStates = 2;
+//make sure these are in centidegrees (1 degree = 100 centidegrees)
+int states[numStates] = {0, 1000};
+int currState = 0;
+int target = 0;
+void nextState() {
+    currState += 1;
+    if (currState == numStates) {
+        currState = 0;
+    }
+    target = states[currState];
+    wallStake.move_absolute(target, 600);
+}
+
 bool clampToggleEnabled = false; // two-choice toggle, so we use bool for clamp
 bool buttonPressed = false; // IGNORE, logic variable
 
@@ -276,16 +329,48 @@ bool buttonPressed2 = false; // IGNORE, logic variable
 bool doinkerToggleEnabled = false; // two-choice toggle, so we use bool for rachet
 bool buttonPressed3 = false; // IGNORE, logic variable
 
-bool intakeToggleEnabled = false; // two-choice toggle, so we use bool for rachet
+bool blueColorSortToggleEnabled = false; // two-choice toggle, so we use bool for rachet
 bool buttonPressed4 = false; // IGNORE, logic variable
+
+bool redColorSortToggleEnabled = false; // two-choice toggle, so we use bool for rachet
+bool buttonPressed5 = false; // IGNORE, logic variable
 
 void opcontrol() {
   pros::motor_brake_mode_e_t driver_preference_brake = MOTOR_BRAKE_COAST;
   chassis.drive_brake_set(driver_preference_brake);
-  wallStake.set_brake_mode(MOTOR_BRAKE_COAST);
-  pros::Task ejectRed(senseRedOP);
-
+  drive.set_brake_mode_all(MOTOR_BRAKE_COAST);
+  pros::Task colorRed(senseRedOP);
+  pros::Task colorBlue(senseBlueOP);
+  colorRed.suspend();
+  colorBlue.suspend();
   while (true) {
+    if (!pros::competition::is_connected()) {
+    // PID Tuner
+    // - after you find values that you're happy with, you'll have to set them in auton.cpp
+
+    // Enable / Disable PID Tuner
+    //  When enabled:
+    //  * use A and Y to increment / decrement the constants
+    //  * use the arrow keys to navigate the constants
+    if (master.get_digital_new_press(DIGITAL_X))
+      chassis.pid_tuner_toggle();
+
+    // Trigger the selected autonomous routine
+    if (master.get_digital(DIGITAL_X) && master.get_digital(DIGITAL_UP)) {
+      pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
+      autonomous();
+      chassis.drive_brake_set(preference);
+    }
+
+    // Allow PID Tuner to iterate
+    chassis.pid_tuner_iterate();
+  }
+
+  // Disable PID Tuner when connected to a comp switch
+  else {
+    if (chassis.pid_tuner_enabled())
+      chassis.pid_tuner_disable();
+  }
     bool buttonY = master.get_digital(DIGITAL_Y);
     //Toggle Logic
     if (buttonY && !buttonPressed){
@@ -294,58 +379,122 @@ void opcontrol() {
     }
     else if (!buttonY) buttonPressed = false;
 
-    bool buttonL1 = master.get_digital(DIGITAL_L1);
+    bool buttonRIGHT = master.get_digital(DIGITAL_RIGHT);
     //Toggle Logic
-    if (buttonL1 && !buttonPressed2){
+    if (buttonRIGHT && !buttonPressed2){
       buttonPressed2 = true; 
       wallStakeToggleEnabled = !wallStakeToggleEnabled;
     }
-    else if (!buttonL1) buttonPressed2 = false;
+    else if (!buttonRIGHT) buttonPressed2 = false;
 
-    bool buttonRight = master.get_digital(DIGITAL_RIGHT);
+    bool buttonUp = master.get_digital(DIGITAL_DOWN);
     //Toggle Logic
-    if (buttonRight && !buttonPressed3){
+    if (buttonUp && !buttonPressed3){
       buttonPressed3 = true; 
       doinkerToggleEnabled = !doinkerToggleEnabled;
     }
-    else if (!buttonRight) buttonPressed3 = false;
+    else if (!buttonUp) buttonPressed3 = false;
 
-    bool buttonX = master.get_digital(DIGITAL_Y);
+    bool buttonLeft = master.get_digital(DIGITAL_LEFT);
     //Toggle Logic
-    if (buttonX && !buttonPressed4){
+    if (buttonLeft && !buttonPressed4){
       buttonPressed4 = true; 
-      intakeToggleEnabled = !intakeToggleEnabled;
+      blueColorSortToggleEnabled = !blueColorSortToggleEnabled;
     }
-    else if (!buttonX) buttonPressed4 = false;
+    else if (!buttonLeft) buttonPressed4 = false;
+
+    bool buttonLeft2 = master.get_digital(DIGITAL_LEFT);
+    //Toggle Logic
+    if (buttonLeft2 && !buttonPressed5){
+      buttonPressed5 = true; 
+      redColorSortToggleEnabled = !redColorSortToggleEnabled;
+    }
+    else if (!buttonLeft2) buttonPressed5 = false;
     
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
         autonomous();
         chassis.drive_brake_set(driver_preference_brake);
       }
-    
-  
+      if(color == 1)
+      {
+        if(blueColorSortToggleEnabled){
+          // Do another thing
+          colorBlue.suspend();
+          if(master.get_digital(DIGITAL_R1))
+          {
+            intakeMotor.move_velocity(600);
+          }
+          else if(master.get_digital(DIGITAL_R2))
+          {
+            intakeMotor.move_velocity(-600);
+          }
+          else
+          {
+            intakeMotor.move_velocity(0);
+          }
+
+        }
+        else{
+          // Do initial thing
+          colorBlue.resume();
+        }
+      }
+      else if(color == 2)
+      {
+        if(redColorSortToggleEnabled){
+          // Do another thing
+          colorRed.suspend();
+          if(master.get_digital(DIGITAL_R1))
+          {
+            intakeMotor.move_velocity(600);
+          }
+          else if(master.get_digital(DIGITAL_R2))
+          {
+            intakeMotor.move_velocity(-600);
+          }
+          else
+          {
+            intakeMotor.move_velocity(0);
+          }
+
+        }
+        else{
+          // Do initial thing
+          colorRed.resume();
+        }
+      }
+      else
+      {
+        if(master.get_digital(DIGITAL_R1))
+          {
+            intakeMotor.move_velocity(600);
+          }
+          else if(master.get_digital(DIGITAL_R2))
+          {
+            intakeMotor.move_velocity(-600);
+          }
+          else
+          {
+            intakeMotor.move_velocity(0);
+          }
+      }
     wallStake.set_brake_mode_all(MOTOR_BRAKE_HOLD);
-    if(master.get_digital(DIGITAL_L1))
-    {
-      if(wallStakeToggleEnabled){
       
-      wallStake.move_absolute(234, 600);
-
-    }
-    else{
-
-      wallStake.move_absolute(1400, 600);
-    
-    }
-      
-    }
-    else if(master.get_digital(DIGITAL_L2))
+    // if(master.get_digital_new_press(DIGITAL_L1))
+    // {
+    //   wallStake.move_velocity(600);
+    // }    
+    // else
+    // {
+    //   wallStake.move_velocity(0);
+    // }
+    if(master.get_digital_new_press(DIGITAL_L2))
     {
-      wallStake.move_velocity(-600);
-    }
-    else
+      wallStake.move_absolute(-130,600);
+    }    
+    else if(master.get_digital_new_press(DIGITAL_RIGHT))
     {
-      wallStake.move_velocity(0);
+      nextState();
     }
 
 
@@ -366,19 +515,15 @@ void opcontrol() {
       // Do initial thing
       doinker.set_value(0);
     }
-    if(master.get_digital(DIGITAL_LEFT)){
-      intake.set_value(0);
-    }
 
-    /*if(intakeToggleEnabled){
-      // Do another thing
-      intake.set_value(1);
-    }
-    else{
-      // Do initial thing
-      intake.set_value(0);
-    
-    }*/
+    // if (master.get_digital(DIGITAL_UP) && master.get_digital(DIGITAL_X)) {
+    //   while(wallSense.get_distance() <= 350)
+    //   {
+    //     drive.move_velocity(-100);
+    //   }
+    //   drive.move_velocity(0);
+    //   wallStake.move_absolute(1450, 600);
+    // }
 
 
     //chassis.opcontrol_tank();  // Tank control
