@@ -480,14 +480,14 @@ void opcontrol() {
       }
     wallStake.set_brake_mode_all(MOTOR_BRAKE_HOLD);
       
-    // if(master.get_digital_new_press(DIGITAL_L1))
-    // {
-    //   wallStake.move_velocity(600);
-    // }    
-    // else
-    // {
-    //   wallStake.move_velocity(0);
-    // }
+    if(master.get_digital(DIGITAL_L1))
+    {
+      wallStake.move_velocity(600);
+    }    
+    else
+    {
+      wallStake.move_velocity(0);
+    }
     if(master.get_digital_new_press(DIGITAL_L2))
     {
       wallStake.move_absolute(-130,600);
