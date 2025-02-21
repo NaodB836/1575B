@@ -274,10 +274,18 @@ void measure_offsets() {
 
 
 void elimsAutoRedLeft() {
+//   chassis.moveTo(0, 0, 5000);
+// chassis.moveTo(42.011, 9.258, 5000);
+// chassis.moveTo(41.774, 35.183, 5000);
+// chassis.moveTo(8.951, 40.177, 5000);
+// chassis.moveTo(-1.514, 52.07, 5000);
+// chassis.moveTo(17.276, 32.804, 5000);
+// chassis.moveTo(44.152, 6.641, 5000);
+
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
   chassis.drive_sensor_reset();               // Reset drive sensors to 0
-  chassis.odom_xyt_set(-65.502_in, 17.458_in, 215_deg);    // Set the current position, you can start at a specific position with this
+  chassis.odom_xyt_set(-65.502_in, 17.458_in, 216_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistencey
   
   pros::Task intaking(sensingBlue);
@@ -687,6 +695,16 @@ void blueRingRush()
 
 void redRingRush()
 {
+// chassis.moveTo(-58.843, 17.22, 5000);
+// chassis.moveTo(-2.474, 47.188, 5000);
+// chassis.moveTo(-24.593, 24.117, 5000);
+// chassis.moveTo(-23.88, 49.329, 5000);
+// chassis.moveTo(-67.643, 67.167, 5000);
+// chassis.moveTo(-59.794, 25.545, 5000);
+// chassis.moveTo(-46.713, 0.095, 5000);
+// chassis.moveTo(-67.405, -0.381, 5000);
+// chassis.moveTo(-25.307, 0.333, 5000);
+
   color = 1;
   pros::Task intaking(sensingBlue);
   pros::Task stopping(stoppingRed);
@@ -733,6 +751,50 @@ void redRingRush()
 }
 
 void skillsAuto(){
+// chassis.moveTo(-62.41, 20.55, 5000);
+// chassis.moveTo(-47.188, 24.117, 5000);
+// chassis.moveTo(-23.166, 23.88, 5000);
+// chassis.moveTo(-10.798, 37.675, 5000);
+// chassis.moveTo(23.214, 47.188, 5000);
+// chassis.moveTo(-0.095, 40.529, 5000);
+// chassis.moveTo(-1.047, 64.551, 5000);
+// chassis.moveTo(-23.642, 47.188, 5000);
+// chassis.moveTo(-46.951, 47.426, 5000);
+// chassis.moveTo(-61.459, 47.426, 5000);
+// chassis.moveTo(-46.475, 37.437, 5000);
+// chassis.moveTo(-47.426, 61.221, 5000);
+// chassis.moveTo(-63.362, 62.886, 5000);
+// chassis.moveTo(-47.426, 47.188, 5000);
+// chassis.moveTo(-46.951, -24.641, 5000);
+// chassis.moveTo(-23.404, -23.689, 5000);
+// chassis.moveTo(-4.376, -39.149, 5000);
+// chassis.moveTo(23.927, -46.998, 5000);
+// chassis.moveTo(0.381, -41.052, 5000);
+// chassis.moveTo(-1.047, -64.123, 5000);
+// chassis.moveTo(-23.404, -46.76, 5000);
+// chassis.moveTo(-47.188, -46.998, 5000);
+// chassis.moveTo(-61.459, -46.998, 5000);
+// chassis.moveTo(-47.902, -37.484, 5000);
+// chassis.moveTo(-47.188, -59.604, 5000);
+// chassis.moveTo(-66.216, -63.409, 5000);
+// chassis.moveTo(-34.107, -46.047, 5000);
+// chassis.moveTo(46.522, -46.522, 5000);
+// chassis.moveTo(58.653, -22.262, 5000);
+// chassis.moveTo(65.074, -62.458, 5000);
+// chassis.moveTo(46.522, -22.5, 5000);
+// chassis.moveTo(46.522, 1.284, 5000);
+// chassis.moveTo(66.026, 0.809, 5000);
+// chassis.moveTo(39.387, -0.143, 5000);
+// chassis.moveTo(23.927, -23.689, 5000);
+// chassis.moveTo(0.143, 0.095, 5000);
+// chassis.moveTo(23.689, 23.642, 5000);
+// chassis.moveTo(46.285, 46.475, 5000);
+// chassis.moveTo(47.236, 60.27, 5000);
+// chassis.moveTo(46.285, 38.864, 5000);
+// chassis.moveTo(59.128, 46.713, 5000);
+// chassis.moveTo(66.026, 65.74, 5000);
+// chassis.moveTo(12.273, 10.798, 5000);
+
   wallStake.set_brake_mode_all(MOTOR_BRAKE_HOLD);
   wallStake.move_absolute(1350, 600);
   pros::delay(400);
